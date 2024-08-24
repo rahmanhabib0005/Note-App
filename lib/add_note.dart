@@ -80,29 +80,31 @@ class AddNotesState extends State<AddNote> {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => Notes(response)));
       } else {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return Center(
-                child: Container(
-                  color: Colors.white,
-                  width: 300,
-                  height: 200,
-                  child: const Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.warning,
-                          size: 50,
-                        ),
-                        Text(
-                          'Api didn\'t respond! ',
-                          style: TextStyle(fontSize: 20, color: Colors.red),
-                        ),
-                      ]),
-                ),
-              );
-            });
+        UserApi.dialogBox(context, 'Api didn\'t respond! ');
+
+        // showDialog(
+        //     context: context,
+        //     builder: (context) {
+        //       return Center(
+        //         child: Container(
+        //           color: Colors.white,
+        //           width: 300,
+        //           height: 200,
+        //           child: const Column(
+        //               mainAxisAlignment: MainAxisAlignment.center,
+        //               children: [
+        //                 Icon(
+        //                   Icons.warning,
+        //                   size: 50,
+        //                 ),
+        //                 Text(
+        //                   'Api didn\'t respond! ',
+        //                   style: TextStyle(fontSize: 20, color: Colors.red),
+        //                 ),
+        //               ]),
+        //         ),
+        //       );
+        //     });
       }
     } else {
       showDialog(

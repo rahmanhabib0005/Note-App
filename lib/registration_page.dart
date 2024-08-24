@@ -146,61 +146,7 @@ class RegisterState extends State<RegistrationPage> {
                                 : entry.value)
                             .join('\n\n');
 
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Center(
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  minHeight: 250, // Minimum height
-                                  maxWidth:
-                                      300, // Maximum width (you can adjust this as needed)
-                                ),
-                                child: Material(
-                                  color: Colors
-                                      .transparent, // This ensures the background color is set properly
-                                  child: Container(
-                                    color: Colors.white,
-                                    child: Wrap(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(16.0),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Icon(
-                                                Icons.warning,
-                                                size: 50,
-                                                color: Colors
-                                                    .orange, // Optional: color for the icon
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 16.0),
-                                                child: Text(
-                                                  text.isEmpty
-                                                      ? 'API didn\'t respond!'
-                                                      : text,
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                    fontSize: 16,
-                                                  ),
-                                                  textAlign: TextAlign
-                                                      .center, // Center-align text
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                        UserApi.dialogBox(context, text);
                       }
 
                       // var prefs = await SharedPreferences.getInstance();

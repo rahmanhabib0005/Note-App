@@ -112,33 +112,35 @@ class LoginState extends State<Loginpage> {
                           text = response['message'];
                         }
 
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Center(
-                                child: Container(
-                                  color: Colors.white,
-                                  width: 300,
-                                  height: 200,
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.warning,
-                                          size: 50,
-                                        ),
-                                        Text(
-                                          response == null
-                                              ? 'Api didn\'t respond! '
-                                              : text.toString(),
-                                          style: TextStyle(
-                                              fontSize: 20, color: Colors.red),
-                                        ),
-                                      ]),
-                                ),
-                              );
-                            });
+                        UserApi.dialogBox(context, text);
+
+                        // showDialog(
+                        //     context: context,
+                        //     builder: (context) {
+                        //       return Center(
+                        //         child: Container(
+                        //           color: Colors.white,
+                        //           width: 300,
+                        //           height: 200,
+                        //           child: Column(
+                        //               mainAxisAlignment:
+                        //                   MainAxisAlignment.center,
+                        //               children: [
+                        //                 const Icon(
+                        //                   Icons.warning,
+                        //                   size: 50,
+                        //                 ),
+                        //                 Text(
+                        //                   response == null
+                        //                       ? 'Api didn\'t respond! '
+                        //                       : text.toString(),
+                        //                   style: TextStyle(
+                        //                       fontSize: 20, color: Colors.red),
+                        //                 ),
+                        //               ]),
+                        //         ),
+                        //       );
+                        //     });
                       }
                     },
                     child: const Text('Login')),

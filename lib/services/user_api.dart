@@ -83,7 +83,7 @@ class UserApi {
 
       final response = await http.post(url, headers: headers);
       final data = response.body;
-      print(data.toString());
+
       if (jsonDecode(data)['success'] == true) {
         var prefs = await SharedPreferences.getInstance();
         prefs.clear();
@@ -184,14 +184,57 @@ class UserApi {
     }
   }
 
-  static loader() {
-    var context;
+// ==========================================
+
+  static dialogBox(BuildContext context, text) {
     return showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              // minHeight: 200, // Minimum height
+              maxWidth: 300, // Maximum width (you can adjust this as needed)
+            ),
+            child: Material(
+              color: Colors
+                  .transparent, // This ensures the background color is set properly
+              child: Container(
+                color: Colors.white,
+                child: Wrap(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.warning,
+                            size: 50,
+                            color:
+                                Colors.orange, // Optional: color for the icon
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: Text(
+                              text.isEmpty ? 'API didn\'t respond!' : text,
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center, // Center-align text
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

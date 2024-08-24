@@ -1,0 +1,197 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:fetch_apis/model/note.dart';
+import 'package:fetch_apis/model/user.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+class UserApi {
+  static const baseUrl = "http://192.168.0.111/react-api/public/api/";
+
+  static String? token;
+
+  static Future checkInternetConnnection() async {
+    try {
+      final url = Uri.parse("https://google.com");
+      final response = await http.get(url);
+      final data = response.body;
+      print(data.toString());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future fetchUsers() async {
+    try {
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      final uri = Uri.parse("${baseUrl}users");
+      final response = await http.get(uri, headers: headers);
+      final body = response.body;
+      final json = jsonDecode(body);
+      dynamic transformed;
+      if (json) {
+        final results = json['users'] as List<dynamic>;
+        transformed = results.map((e) {
+          return User(email: e['email'], name: e['name']);
+        }).toList();
+      }
+
+      return transformed;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future loginUser(username, password) async {
+    try {
+      final url = Uri.parse("${baseUrl}v1/login");
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+
+      final body =
+          jsonEncode(<String, String>{'email': username, 'password': password});
+      final response = await http.post(url, headers: headers, body: body);
+      final data = response.body;
+
+      // if (jsonDecode(data)['success'] == true) {
+      //   var getToken = jsonDecode(data)['token']['token'];
+      //   token = getToken;
+      //   return token;
+      // }
+
+      return jsonDecode(data);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future logout() async {
+    try {
+      final url = Uri.parse("${baseUrl}v1/logout");
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      bool status = false;
+
+      final response = await http.post(url, headers: headers);
+      final data = response.body;
+      print(data.toString());
+      if (jsonDecode(data)['success'] == true) {
+        var prefs = await SharedPreferences.getInstance();
+        prefs.clear();
+        status = true;
+      }
+
+      return status;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future register(name, username, password, cPassword) async {
+    try {
+      final url = Uri.parse("${baseUrl}v1/register");
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+
+      final body = jsonEncode(<String, String>{
+        'name': name,
+        'email': username,
+        'password': password,
+        'password_confirmation': cPassword
+      });
+      final response = await http.post(url, headers: headers, body: body);
+      final data = response.body;
+
+      // if (jsonDecode(data)['success'] == true) {
+      //   var getToken = jsonDecode(data)['token']['token'];
+      //   token = getToken;
+      //   return token;
+      // }
+
+      return jsonDecode(data);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // static Future<List<Note>> fetchNotes() async {
+  static Future fetchNotes() async {
+    try {
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      final uri = Uri.parse("${baseUrl}v1/note");
+      final response = await http.get(uri, headers: headers);
+      final body = response.body;
+      final json = jsonDecode(body);
+
+      final results = json['notes'] as List<dynamic>;
+      dynamic transformed;
+      transformed = results.map((e) {
+        final noteUser =
+            NoteUser(userName: e['user']['name'], email: e['user']['email']);
+        return Note(
+            note: e['note'],
+            userName: noteUser.userName,
+            email: noteUser.email);
+      }).toList();
+
+      return transformed;
+    } catch (e) {
+      print(e);
+    }
+    // return results;
+  }
+
+  // static Future<bool> addNote(note) async {
+  static Future addNote(note) async {
+    try {
+      final url = Uri.parse("${baseUrl}v1/note/store");
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      final body = jsonEncode(<String, String>{'note': note});
+
+      final response = await http.post(url, headers: headers, body: body);
+      final data = response.body;
+
+      if (jsonDecode(data)['status'] == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static void setToken(tokenValue) {
+    if (tokenValue != null) {
+      token = tokenValue.toString();
+    }
+  }
+
+  static loader() {
+    var context;
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        });
+  }
+}

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:fetch_apis/add_title.dart';
+import 'package:fetch_apis/chatroom/chatroom.dart';
 import 'package:fetch_apis/login_page.dart';
 import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +68,11 @@ class SplashState extends State<Splash> {
           context,
           MaterialPageRoute(
               builder: (context) => tokenValue == "null" || tokenValue == null
-                  ? Loginpage()
-                  : const AddTitle()));
+                  // ? Loginpage()
+                  ? const Chatroom()
+                  : const AddTitle()
+                  
+                  ));
     });
   }
 }

@@ -237,4 +237,75 @@ class UserApi {
       },
     );
   }
+
+  /// Flutter ChatRooms Chattings Api's
+
+  static Future makeChatroom(name) async {
+    try {
+      final url = Uri.parse("${baseUrl}v1/chatroom/store");
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      dynamic chatroomRes;
+      final body = jsonEncode(<String, String>{'name': name});
+
+      final response = await http.post(url, headers: headers, body: body);
+      final data = response.body;
+
+      print(data);
+
+      if (jsonDecode(data)['status'] == 200) {
+        return chatroomRes = jsonDecode(data)['chatroom'];
+      }
+      return chatroomRes;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future storeChat(chatroomId, message) async {
+    try {
+      final url = Uri.parse("${baseUrl}v1/chats/store");
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      dynamic messageRes;
+      final body = jsonEncode(
+          <String, String>{'chatroom_id': chatroomId, 'message': message});
+
+      final response = await http.post(url, headers: headers, body: body);
+      final data = response.body;
+
+      print(data);
+
+      if (jsonDecode(data)['status'] == 200) {
+        return messageRes = jsonDecode(data)['message'];
+      }
+      return messageRes;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future fetchChats(chatroomId) async {
+    try {
+      final headers = <String, String>{
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Authorization': 'Bearer $token'
+      };
+
+      final uri = Uri.parse("${baseUrl}v1/chats/${chatroomId.toString()}");
+      final response = await http.get(uri, headers: headers);
+      final body = response.body;
+      final json = jsonDecode(body);
+      print(json);
+      return json;
+    } catch (e) {
+      print(e);
+    }
+  }
 }

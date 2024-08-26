@@ -129,6 +129,7 @@ class RegisterState extends State<RegistrationPage> {
                         var prefs = await SharedPreferences.getInstance();
                         // prefs.setBool(SplashState.KEYLOGIN, true);
                         prefs.setString('token', token);
+                        UserApi.setToken(token);
                         Navigator.of(context).pop();
                         Navigator.pushReplacement(
                             context,

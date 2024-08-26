@@ -1,4 +1,5 @@
 import 'package:fetch_apis/chatroom/customAppBar.dart';
+import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
 
 class Chatroom extends StatefulWidget {
@@ -16,6 +17,13 @@ class ChatroomState extends State<Chatroom> {
 
   final TextEditingController _controller = TextEditingController();
   final loggedInUserId = 1;
+
+  @override
+  void initState() {
+    super.initState();
+
+   var chats = UserApi.fetchChats(1);
+  }
 
   void _sendMessage() {
     final message = _controller.text.trim();

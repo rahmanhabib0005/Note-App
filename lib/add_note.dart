@@ -74,38 +74,7 @@ class AddNotesState extends State<AddNote> {
     var status = await UserApi.addNote(note);
 
     if (status == true) {
-      var response = await UserApi.fetchNotes();
-      Navigator.of(context).pop();
-      if (response.isNotEmpty) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Notes(response)));
-      } else {
-        UserApi.dialogBox(context, 'Api didn\'t respond! ');
-
-        // showDialog(
-        //     context: context,
-        //     builder: (context) {
-        //       return Center(
-        //         child: Container(
-        //           color: Colors.white,
-        //           width: 300,
-        //           height: 200,
-        //           child: const Column(
-        //               mainAxisAlignment: MainAxisAlignment.center,
-        //               children: [
-        //                 Icon(
-        //                   Icons.warning,
-        //                   size: 50,
-        //                 ),
-        //                 Text(
-        //                   'Api didn\'t respond! ',
-        //                   style: TextStyle(fontSize: 20, color: Colors.red),
-        //                 ),
-        //               ]),
-        //         ),
-        //       );
-        //     });
-      }
+      fetchAndNavigate(context);
     } else {
       showDialog(
           context: context,
@@ -131,6 +100,16 @@ class AddNotesState extends State<AddNote> {
             );
           });
     }
+  }
+
+  void fetchAndNavigate(BuildContext context) async {
+    var response = await UserApi.fetchNotes();
     Navigator.of(context).pop();
+    if (response.isNotEmpty) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Notes(response)));
+    } else {
+      UserApi.dialogBox(context, 'Api didn\'t respond! ');
+    }
   }
 }

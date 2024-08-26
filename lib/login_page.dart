@@ -19,6 +19,12 @@ class LoginState extends State<Loginpage> {
     // getValue();
   }
 
+  // void getValue() async {
+  //   var prefs = await SharedPreferences.getInstance();
+  //   var token = prefs.getString('token');
+  //   print(token);
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,6 +105,7 @@ class LoginState extends State<Loginpage> {
                         var prefs = await SharedPreferences.getInstance();
                         // prefs.setBool(SplashState.KEYLOGIN, true);
                         prefs.setString('token', token);
+                        UserApi.setToken(token);
                         Navigator.of(context).pop();
                         Navigator.pushReplacement(
                             context,
@@ -113,34 +120,6 @@ class LoginState extends State<Loginpage> {
                         }
 
                         UserApi.dialogBox(context, text);
-
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (context) {
-                        //       return Center(
-                        //         child: Container(
-                        //           color: Colors.white,
-                        //           width: 300,
-                        //           height: 200,
-                        //           child: Column(
-                        //               mainAxisAlignment:
-                        //                   MainAxisAlignment.center,
-                        //               children: [
-                        //                 const Icon(
-                        //                   Icons.warning,
-                        //                   size: 50,
-                        //                 ),
-                        //                 Text(
-                        //                   response == null
-                        //                       ? 'Api didn\'t respond! '
-                        //                       : text.toString(),
-                        //                   style: TextStyle(
-                        //                       fontSize: 20, color: Colors.red),
-                        //                 ),
-                        //               ]),
-                        //         ),
-                        //       );
-                        //     });
                       }
                     },
                     child: const Text('Login')),

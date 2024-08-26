@@ -7,16 +7,23 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserApi {
-  static const baseUrl = "http://192.168.0.111/react-api/public/api/";
+  static const baseUrl = "https://dev.bitbirds.net/habib/api/";
+  // static const baseUrl = "http://192.168.0.111/react-api/public/api/";
 
   static String? token;
+
+  static void setToken(tokenValue) {
+    if (tokenValue != null) {
+      token = tokenValue.toString();
+    }
+  }
 
   static Future checkInternetConnnection() async {
     try {
       final url = Uri.parse("https://google.com");
       final response = await http.get(url);
       final data = response.body;
-      print(data.toString());
+      return data;
     } catch (e) {
       print(e);
     }
@@ -34,14 +41,20 @@ class UserApi {
       final body = response.body;
       final json = jsonDecode(body);
       dynamic transformed;
-      if (json) {
-        final results = json['users'] as List<dynamic>;
-        transformed = results.map((e) {
-          return User(email: e['email'], name: e['name']);
-        }).toList();
-      }
 
-      return transformed;
+
+if (json is Map<String, dynamic> && json.containsKey('users')) {
+  final results = json['users'] as List<dynamic>;
+
+
+  transformed = results.map((e) {
+    return User(email: e['email'], name: e['name']);
+  }).toList();
+} else {
+  transformed = []; 
+}
+
+return transformed;
     } catch (e) {
       print(e);
     }
@@ -175,12 +188,6 @@ class UserApi {
       return false;
     } catch (e) {
       print(e);
-    }
-  }
-
-  static void setToken(tokenValue) {
-    if (tokenValue != null) {
-      token = tokenValue.toString();
     }
   }
 

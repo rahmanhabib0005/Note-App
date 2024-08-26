@@ -68,11 +68,12 @@ class SplashState extends State<Splash> {
           context,
           MaterialPageRoute(
               builder: (context) => tokenValue == "null" || tokenValue == null
-                  // ? Loginpage()
-                  ? const Chatroom()
-                  : const AddTitle()
-                  
-                  ));
+                  ? Loginpage()
+                  // ? const Chatroom()
+                  // : const Chatroom()
+              : const AddTitle()
+
+              ));
     });
   }
 }

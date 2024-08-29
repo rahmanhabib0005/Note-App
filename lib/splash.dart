@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:fetch_apis/add_title.dart';
 import 'package:fetch_apis/chatroom/chatroom.dart';
+import 'package:fetch_apis/chatroom/chooseroom.dart';
 import 'package:fetch_apis/login_page.dart';
 import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
@@ -35,26 +35,8 @@ class SplashState extends State<Splash> {
     );
   }
 
-  // void fetchUser() async {
-  //   var username = "habibur@bitbirds.com";
-  //   var password = "Admin@123";
-
-  //   var token = await UserApi.loginUser(username, password);
-  //   if (token != null) {
-  //     Navigator.pushReplacement(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => Loginpage()
-  //           ),
-  //  const AddTitle()
-  // const MyHomePage(
-  //       title: "Flutter Api's",
-  //     ),
-  // );
-  //   }
-  // }
-
   void fetchUser() async {
-    await UserApi.checkInternetConnnection();
+    // await UserApi.checkInternetConnnection();
     var prefs = await SharedPreferences.getInstance();
     // prefs.clear();
     var tokenValue = prefs.getString('token');
@@ -70,8 +52,9 @@ class SplashState extends State<Splash> {
               builder: (context) => tokenValue == "null" || tokenValue == null
                   ? Loginpage()
                   // ? const Chatroom()
-                  // : const Chatroom()
-              : const AddTitle()
+                  // : const Chooseroom()
+                  : const Chatroom()
+              // : const AddTitle()
 
               ));
     });

@@ -88,15 +88,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void fetchUser() async {
-    // var username = "habibur@bitbirds.com";
-    // var password = "Admin@123";
-
-    // var token = await UserApi.loginUser(username, password);
-    // if (token != null) {
-
-    // var token = context.watch<TokenProvider>().token.toString();
-    // print(token);
-
     var response = await UserApi.fetchUsers();
     if (response != null) {
       setState(() {
@@ -104,31 +95,6 @@ class _MyHomePageState extends State<MyHomePage> {
       });
     } else {
       UserApi.dialogBox(context, 'Api didn\'t respond! ');
-
-      // showDialog(
-      //     context: context,
-      //     builder: (context) {
-      //       return Center(
-      //         child: Container(
-      //           color: Colors.white,
-      //           width: 300,
-      //           height: 200,
-      //           child: const Column(
-      //               mainAxisAlignment: MainAxisAlignment.center,
-      //               children: [
-      //                 Icon(
-      //                   Icons.warning,
-      //                   size: 50,
-      //                 ),
-      //                 Text(
-      //                   'Api didn\'t respond! ',
-      //                   style: TextStyle(fontSize: 20, color: Colors.red),
-      //                 ),
-      //               ]),
-      //         ),
-      //       );
-      //     });
     }
   }
-  // }
 }

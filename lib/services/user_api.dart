@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:fetch_apis/model/chat.dart';
 import 'package:fetch_apis/model/note.dart';
+import 'package:fetch_apis/model/rooms.dart';
 import 'package:fetch_apis/model/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -42,19 +44,17 @@ class UserApi {
       final json = jsonDecode(body);
       dynamic transformed;
 
+      if (json is Map<String, dynamic> && json.containsKey('users')) {
+        final results = json['users'] as List<dynamic>;
 
-if (json is Map<String, dynamic> && json.containsKey('users')) {
-  final results = json['users'] as List<dynamic>;
+        transformed = results.map((e) {
+          return User(email: e['email'], name: e['name']);
+        }).toList();
+      } else {
+        transformed = [];
+      }
 
-
-  transformed = results.map((e) {
-    return User(email: e['email'], name: e['name']);
-  }).toList();
-} else {
-  transformed = []; 
-}
-
-return transformed;
+      return transformed;
     } catch (e) {
       print(e);
     }
@@ -261,8 +261,6 @@ return transformed;
       final response = await http.post(url, headers: headers, body: body);
       final data = response.body;
 
-      print(data);
-
       if (jsonDecode(data)['status'] == 200) {
         return chatroomRes = jsonDecode(data)['chatroom'];
       }
@@ -287,8 +285,6 @@ return transformed;
       final response = await http.post(url, headers: headers, body: body);
       final data = response.body;
 
-      print(data);
-
       if (jsonDecode(data)['status'] == 200) {
         return messageRes = jsonDecode(data)['message'];
       }
@@ -298,21 +294,71 @@ return transformed;
     }
   }
 
-  static Future fetchChats(chatroomId) async {
-    try {
-      final headers = <String, String>{
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': 'Bearer $token'
-      };
+  static Future<List<Chat>> fetchChats(chatroomId) async {
+    final headers = <String, String>{
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Authorization': 'Bearer $token'
+    };
+    final uri = Uri.parse("${baseUrl}v1/chats/${chatroomId.toString()}");
 
-      final uri = Uri.parse("${baseUrl}v1/chats/${chatroomId.toString()}");
+    try {
       final response = await http.get(uri, headers: headers);
-      final body = response.body;
-      final json = jsonDecode(body);
-      print(json);
-      return json;
+
+      if (response.statusCode == 200) {
+        final body = response.body;
+        final Map<String, dynamic> json = jsonDecode(body);
+
+        // Check if 'messages' is a List
+        final List<dynamic> messagesJson = json['messages'];
+
+        // Convert JSON list to List<Chat>
+        final List<Chat> chats = messagesJson.map((e) {
+          return Chat.fromJson(e);
+        }).toList();
+
+        return chats;
+      } else {
+        // Handle the case where the server responds with an error
+        throw Exception('Failed to load chats: ${response.statusCode}');
+      }
     } catch (e) {
-      print(e);
+      // Handle any errors
+      print('Error fetching chats: $e');
+      return [];
+    }
+  }
+
+  static Future<List<Rooms>> fetchRooms() async {
+    print('ok');
+    final headers = <String, String>{
+      'Content-Type': 'application/json;charset=UTF-8',
+      'Authorization': 'Bearer $token'
+    };
+    final uri = Uri.parse("${baseUrl}v1/chatroom");
+
+    try {
+      final response = await http.get(uri, headers: headers);
+      print(response.body);
+      if (response.statusCode == 200) {
+        final body = response.body;
+        print(body);
+        final Map<String, dynamic> json = jsonDecode(body);
+
+        // Check if 'messages' is a List
+        final List<dynamic> messagesJson = json['rooms'];
+        final List<Rooms> rooms = messagesJson.map((e) {
+          return Rooms.fromJson(e);
+        }).toList();
+
+        return rooms;
+      } else {
+        // Handle the case where the server responds with an error
+        throw Exception('Failed to load chatroms: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle any errors
+      print('Error fetching chats: $e');
+      return [];
     }
   }
 }

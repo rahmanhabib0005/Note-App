@@ -1,4 +1,5 @@
 import 'package:fetch_apis/chatroom/customAppBar.dart';
+import 'package:fetch_apis/model/chat.dart';
 import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
 
@@ -10,31 +11,47 @@ class Chatroom extends StatefulWidget {
 }
 
 class ChatroomState extends State<Chatroom> {
-  List<Map<dynamic, dynamic>> chats = [
-    {'user_id': '1', 'name': 'Habibur Rahman', 'message': 'Hi'},
-    {'user_id': '2', 'name': 'Habibur', 'message': 'Hello'},
-  ];
-
+  List<Chat> chats = [];
   final TextEditingController _controller = TextEditingController();
-  final loggedInUserId = 1;
+  final chatRoomId = 1;
 
   @override
   void initState() {
     super.initState();
-
-   var chats = UserApi.fetchChats(1);
+    callApi();
   }
 
-  void _sendMessage() {
+  void callApi() async {
+    try {
+      // Fetch chats from API
+      List<Chat> fetchedChats = await UserApi.fetchChats(chatRoomId);
+      setState(() {
+        chats = fetchedChats;
+      });
+    } catch (error) {
+      print('Error fetching chats: $error');
+    }
+  }
+
+  void _sendMessage() async {
     final message = _controller.text.trim();
     if (message.isNotEmpty) {
-      setState(() {
-        chats.add({
-          'message': message,
-          'name': 'Habibur'
-        }); // Assuming 'Alice' is the current user
+      try {
+        // Add the new chat message
+        setState(() {
+          chats.add(Chat(
+              message: message,
+              userName: 'Habibur',
+              chatroomId: "1",
+              userId: "2"));
+        });
+
+        // Store the new chat message
+        await UserApi.storeChat(chatRoomId.toString(), message);
         _controller.clear();
-      });
+      } catch (error) {
+        print('Error sending message: $error');
+      }
     }
   }
 
@@ -49,11 +66,11 @@ class ChatroomState extends State<Chatroom> {
               itemCount: chats.length,
               itemBuilder: (context, index) {
                 final chat = chats[index];
-                final message = chat['message']!;
-                final name = chat['name']!;
+                final message = chat.message;
+                final name = chat.userName;
 
-                final isUserMessage = name ==
-                    'Habibur'; // Example condition to distinguish messages
+                final isUserMessage = chat.userId ==
+                    "2"; // Example condition to distinguish messages
 
                 return Container(
                   margin:

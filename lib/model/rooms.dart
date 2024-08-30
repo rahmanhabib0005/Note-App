@@ -1,5 +1,5 @@
 class Rooms {
-  final String roomId;
+  final dynamic roomId;
   final String roomName;
 
   Rooms({
@@ -8,11 +8,6 @@ class Rooms {
   });
 
   factory Rooms.fromJson(Map<String, dynamic> json) {
-    return Rooms(
-      roomId: json['id'],
-      roomName: json['name']
-    );
+    return Rooms(roomId: json['id'], roomName: json['name']);
   }
-
-
 }

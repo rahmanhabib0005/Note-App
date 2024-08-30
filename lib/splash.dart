@@ -52,8 +52,8 @@ class SplashState extends State<Splash> {
               builder: (context) => tokenValue == "null" || tokenValue == null
                   ? Loginpage()
                   // ? const Chatroom()
-                  // : const Chooseroom()
-                  : const Chatroom()
+                  : const Chooseroom()
+                  // : const Chatroom()
               // : const AddTitle()
 
               ));

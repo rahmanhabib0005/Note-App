@@ -299,6 +299,7 @@ class UserApi {
       'Content-Type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer $token'
     };
+
     final uri = Uri.parse("${baseUrl}v1/chats/${chatroomId.toString()}");
 
     try {
@@ -306,6 +307,7 @@ class UserApi {
 
       if (response.statusCode == 200) {
         final body = response.body;
+
         final Map<String, dynamic> json = jsonDecode(body);
 
         // Check if 'messages' is a List
@@ -329,7 +331,6 @@ class UserApi {
   }
 
   static Future<List<Rooms>> fetchRooms() async {
-    print('ok');
     final headers = <String, String>{
       'Content-Type': 'application/json;charset=UTF-8',
       'Authorization': 'Bearer $token'
@@ -338,10 +339,8 @@ class UserApi {
 
     try {
       final response = await http.get(uri, headers: headers);
-      print(response.body);
       if (response.statusCode == 200) {
         final body = response.body;
-        print(body);
         final Map<String, dynamic> json = jsonDecode(body);
 
         // Check if 'messages' is a List

@@ -4,7 +4,9 @@ import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
 
 class Chatroom extends StatefulWidget {
-  const Chatroom({super.key});
+  const Chatroom({super.key, this.chatRoomId});
+
+  final dynamic chatRoomId;
 
   @override
   State<Chatroom> createState() => ChatroomState();
@@ -13,7 +15,6 @@ class Chatroom extends StatefulWidget {
 class ChatroomState extends State<Chatroom> {
   List<Chat> chats = [];
   final TextEditingController _controller = TextEditingController();
-  final chatRoomId = 1;
 
   @override
   void initState() {
@@ -24,7 +25,8 @@ class ChatroomState extends State<Chatroom> {
   void callApi() async {
     try {
       // Fetch chats from API
-      List<Chat> fetchedChats = await UserApi.fetchChats(chatRoomId);
+      List<Chat> fetchedChats =
+          await UserApi.fetchChats(widget.chatRoomId.toString());
       setState(() {
         chats = fetchedChats;
       });
@@ -42,12 +44,12 @@ class ChatroomState extends State<Chatroom> {
           chats.add(Chat(
               message: message,
               userName: 'Habibur',
-              chatroomId: "1",
+              chatroomId: widget.chatRoomId.toString(),
               userId: "2"));
         });
 
         // Store the new chat message
-        await UserApi.storeChat(chatRoomId.toString(), message);
+        await UserApi.storeChat(widget.chatRoomId.toString(), message);
         _controller.clear();
       } catch (error) {
         print('Error sending message: $error');

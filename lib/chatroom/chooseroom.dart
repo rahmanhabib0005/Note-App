@@ -1,3 +1,4 @@
+import 'package:fetch_apis/chatroom/chatroom.dart';
 import 'package:fetch_apis/chatroom/customAppBar.dart';
 import 'package:fetch_apis/model/rooms.dart';
 import 'package:fetch_apis/services/user_api.dart';
@@ -23,7 +24,6 @@ class ChooseroomState extends State<Chooseroom> {
     try {
       // Fetch chats from API
       List<Rooms> fetchedChats = await UserApi.fetchRooms();
-      print(fetchedChats);
       setState(() {
         rooms = fetchedChats;
       });
@@ -43,8 +43,23 @@ class ChooseroomState extends State<Chooseroom> {
               itemCount: rooms.length,
               itemBuilder: (context, index) {
                 final room = rooms[index];
-                return ListTile(
-                  title: Text(room.roomName),
+                final name = room.roomName;
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Chatroom(
+                                  chatRoomId: room.roomId,
+                                )));
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      // child: Image.network(image),
+                      child: Text("${index + 1}"),
+                    ),
+                    title: Text(name),
+                  ),
                 );
               },
             ),

@@ -70,19 +70,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 final user = users[index];
                 final email = user.email;
                 final name = user.name;
-                return ListTile(
-                  leading: CircleAvatar(
-                    // child: Image.network(image),
-                    child: Text("${index + 1}"),
+                return InkWell(
+                  onTap: () {
+                    createRoom(user.id);
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      child: Text("${index + 1}"),
+                    ),
+                    subtitle: Text(email!),
+                    title: Text(name!),
                   ),
-                  subtitle: Text(email!),
-                  title: Text(name!),
                 );
               }),
-          floatingActionButton: FloatingActionButton(
-            onPressed: fetchUser,
-            child: const Text('\$'),
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: fetchUser,
+          //   child: const Text('\$'),
+          // ),
           // floatingActionButton: FloatingActionButton(onPressed: fetchUser),
         ));
   }
@@ -96,5 +100,9 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       UserApi.dialogBox(context, 'Api didn\'t respond! ');
     }
+  }
+
+  void createRoom(id) async {
+    // var response = await UserApi.makeChatroom(Random(5));
   }
 }

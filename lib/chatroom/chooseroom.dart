@@ -1,5 +1,6 @@
 import 'package:fetch_apis/chatroom/chatroom.dart';
 import 'package:fetch_apis/chatroom/customAppBar.dart';
+import 'package:fetch_apis/main.dart';
 import 'package:fetch_apis/model/rooms.dart';
 import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,13 @@ class ChooseroomState extends State<Chooseroom> {
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const MyHomePage()));
+        },
+        child: const Icon(Icons.chat),
       ),
     );
   }

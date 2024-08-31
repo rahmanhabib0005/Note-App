@@ -48,7 +48,8 @@ class UserApi {
         final results = json['users'] as List<dynamic>;
 
         transformed = results.map((e) {
-          return User(email: e['email'], name: e['name']);
+          return User(
+              id: e['id'].toString(), email: e['email'], name: e['name']);
         }).toList();
       } else {
         transformed = [];

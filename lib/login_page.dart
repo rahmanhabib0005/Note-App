@@ -105,6 +105,8 @@ class LoginState extends State<Loginpage> {
                         var prefs = await SharedPreferences.getInstance();
                         // prefs.setBool(SplashState.KEYLOGIN, true);
                         prefs.setString('token', token);
+                        prefs.setString(
+                            'loggedinUser', response['user']['id'].toString());
                         UserApi.setToken(token);
                         Navigator.of(context).pop();
                         Navigator.pushReplacement(

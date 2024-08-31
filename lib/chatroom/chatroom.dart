@@ -2,6 +2,7 @@ import 'package:fetch_apis/chatroom/customAppBar.dart';
 import 'package:fetch_apis/model/chat.dart';
 import 'package:fetch_apis/services/user_api.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Chatroom extends StatefulWidget {
   const Chatroom({super.key, this.chatRoomId});
@@ -15,6 +16,7 @@ class Chatroom extends StatefulWidget {
 class ChatroomState extends State<Chatroom> {
   List<Chat> chats = [];
   final TextEditingController _controller = TextEditingController();
+  late final String userID;
 
   @override
   void initState() {
@@ -25,6 +27,8 @@ class ChatroomState extends State<Chatroom> {
   void callApi() async {
     try {
       // Fetch chats from API
+      var prefs = await SharedPreferences.getInstance();
+      userID = prefs.getString('loggedinUser')!;
       List<Chat> fetchedChats =
           await UserApi.fetchChats(widget.chatRoomId.toString());
       setState(() {
@@ -45,7 +49,7 @@ class ChatroomState extends State<Chatroom> {
               message: message,
               userName: 'Habibur',
               chatroomId: widget.chatRoomId.toString(),
-              userId: "2"));
+              userId: userID));
         });
 
         // Store the new chat message
@@ -72,7 +76,7 @@ class ChatroomState extends State<Chatroom> {
                 final name = chat.userName;
 
                 final isUserMessage = chat.userId ==
-                    "2"; // Example condition to distinguish messages
+                    userID; // Example condition to distinguish messages
 
                 return Container(
                   margin:

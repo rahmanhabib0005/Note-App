@@ -1,11 +1,13 @@
 class User {
   // final String gender;
-  final String ?email;
+  final String? id;
+  final String? email;
   // final String phone;
   // final String cell;
   // final String nat;
-  final String ?name;
+  final String? name;
   User({
+    required this.id,
     // required this.gender,
     required this.email,
     // required this.phone,

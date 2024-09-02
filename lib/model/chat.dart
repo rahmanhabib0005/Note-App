@@ -3,12 +3,14 @@ class Chat {
   final String chatroomId;
   final String userId;
   final String userName;
+  final bool isSent;
 
   Chat(
       {required this.message,
       required this.chatroomId,
       required this.userId,
-      required this.userName});
+      required this.userName,
+      this.isSent = false});
 
   factory Chat.fromJson(Map<String, dynamic> json) {
     return Chat(

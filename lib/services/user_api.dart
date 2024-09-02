@@ -9,8 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserApi {
-  static const baseUrl = "https://dev.bitbirds.net/habib/api/";
-  // static const baseUrl = "http://192.168.0.111/react-api/public/api/";
+  // static const baseUrl = "https://dev.bitbirds.net/habib/api/";
+  static const baseUrl = "http://192.168.0.111/react-api/public/api/";
 
   static String? token;
 

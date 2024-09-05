@@ -1,6 +1,7 @@
 import 'package:fetch_apis/chatroom/customAppBar.dart';
 import 'package:fetch_apis/model/chat.dart';
 import 'package:fetch_apis/services/user_api.dart';
+import 'package:fetch_apis/services/websocket_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,8 +21,8 @@ class ChatroomState extends State<Chatroom> {
 
 
   // websocket codes
-  // final WebsocketService _webSocketService = WebsocketService(
-  //     'ws://localhost:8765');
+  final WebsocketService _webSocketService = WebsocketService(
+      'ws://localhost:8765');
   // Update with your WebSocket server URL
 
   @override
@@ -32,11 +33,11 @@ class ChatroomState extends State<Chatroom> {
 
   
 
-  // @override
-  // void dispose() {
-  //   _webSocketService.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    _webSocketService.dispose();
+    super.dispose();
+  }
 
 
   void callApi() async {
@@ -47,21 +48,21 @@ class ChatroomState extends State<Chatroom> {
       List<Chat> fetchedChats =
           await UserApi.fetchChats(widget.chatRoomId.toString());
 
-      // _webSocketService.stream.listen((message) {
-      //   final newChat = Chat(
-      //     message: message,
-      //     userName: userID == "2" ? 'Habibur Rahman' : "Habibur",
-      //     chatroomId: widget.chatRoomId.toString(),
-      //     userId: userID == "2" ? "1" : "2",
-      //     isSent: false, // Mark as received message
-      //   );
-      //   setState(() {
-      //     // Only add messages that are not from the current user
-      //     if (!newChat.isSent) {
-      //       chats.add(newChat);
-      //     }
-      //   });
-      // });
+      _webSocketService.stream.listen((message) {
+        final newChat = Chat(
+          message: message,
+          userName: userID == "2" ? 'Habibur Rahman' : "Habibur",
+          chatroomId: widget.chatRoomId.toString(),
+          userId: userID == "2" ? "1" : "2",
+          isSent: false, // Mark as received message
+        );
+        setState(() {
+          // Only add messages that are not from the current user
+          if (!newChat.isSent) {
+            chats.add(newChat);
+          }
+        });
+      });
 
       setState(() {
         chats = fetchedChats;
